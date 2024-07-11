@@ -9,24 +9,14 @@ public class PlaceCharacter_adj : NetworkBehaviour
     [SerializeField] private GameObject placementObject;
     private Camera mainCam;
 
-    // share Imager Marker Location variable for adjusting player's spawn position.y
-    private Vector3 _markerPosition, spawnPosition;
+    // share spawn Location variable for adjusting player's spawn position.y
+    private Vector3 spawnPosition;
+    private NetworkVariable<float> referenceHeight = new NetworkVariable<float>(0f);
+    private bool isHeightSetLocally = false;
 
     private void Start()
     {
         mainCam = GameObject.FindObjectOfType<Camera>();
-
-        StartGameAR.OnMarkerPosition += GetMarkerPosition;
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        StartGameAR.OnMarkerPosition -= GetMarkerPosition;
-    }
-
-    private void GetMarkerPosition(Vector3 mPosition)
-    {
-        _markerPosition = mPosition;
     }
 
     // Update is called once per frame
@@ -86,17 +76,44 @@ public class PlaceCharacter_adj : NetworkBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
-            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            SpawnPlayerServerRpc(hit.point, rotation, NetworkManager.Singleton.LocalClientId);
+            if (IsServer)
+            {
+                if (!isHeightSetLocally)
+                {
+                    // 기준 높이를 서버에 설정 요청
+                    SetReferenceHeightServerRpc(hit.point.y);
+                    isHeightSetLocally = true;
+                }
+
+                // 기준 높이를 설정한 후에도 캐릭터를 생성
+                spawnPosition = hit.point;
+                spawnPosition.y = referenceHeight.Value;
+
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                SpawnPlayerServerRpc(spawnPosition, rotation, NetworkManager.Singleton.LocalClientId);
+            }
+            else if (referenceHeight.Value != 0f)
+            {
+                // 네트워크 변수에서 기준 높이를 가져와서 높이를 조정
+                spawnPosition = hit.point;
+                spawnPosition.y = referenceHeight.Value;
+
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                SpawnPlayerServerRpc(spawnPosition, rotation, NetworkManager.Singleton.LocalClientId);
+            }
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetReferenceHeightServerRpc(float height)
+    {
+        referenceHeight.Value = height;
     }
 
     [ServerRpc(RequireOwnership = false)]
     void SpawnPlayerServerRpc(Vector3 position, Quaternion rotation, ulong callerID)
     {
-        // 마커 이미지 기준으로 y 위치를 고정
-        spawnPosition = new Vector3(position.x, _markerPosition.y, position.z);
-        GameObject character = Instantiate(placementObject, spawnPosition, rotation);
+        GameObject character = Instantiate(placementObject, position, rotation);
 
         NetworkObject characterNetworkObject = character.GetComponent<NetworkObject>();
         characterNetworkObject.SpawnWithOwnership(callerID);
@@ -108,5 +125,6 @@ public class PlaceCharacter_adj : NetworkBehaviour
     {
         // 디버깅용 GUI 띄우기
         GUI.Label(new Rect(50, 100, 400, 30), $"플레이어 {NetworkManager.Singleton.LocalClientId}가 생성된 위치: {spawnPosition}");
+        GUI.Label(new Rect(50, 130, 400, 30), $"기준 높이: {referenceHeight.Value}");
     }
 }

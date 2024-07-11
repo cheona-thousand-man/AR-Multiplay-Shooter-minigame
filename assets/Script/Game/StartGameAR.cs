@@ -20,8 +20,6 @@ public class StartGameAR : MonoBehaviour
     [SerializeField] private Button JoinRoomButton;
     private bool isHost;
 
-    // share Imager Marker Location variable
-    private Vector3 markerPosition;
 
     // Unused event
     public static event Action OnStartSharedSpaceHost;
@@ -29,8 +27,6 @@ public class StartGameAR : MonoBehaviour
     public static event Action OnStartGame;
     public static event Action OnStartSharedSpace;
 
-    // share Imager Marker Location event
-    public static event Action<Vector3> OnMarkerPosition; 
 
     private void Awake()
     {
@@ -56,15 +52,12 @@ public class StartGameAR : MonoBehaviour
             StartGameButton.interactable = true;
             CreateRoomButton.interactable = false;
             JoinRoomButton.interactable = false;
-
-            markerPosition = _sharedSpaceManager.SharedArOriginObject.transform.position;
         }
     }
 
     void StartGame()
     {
         // OnStartGame?.Invoke();
-        OnMarkerPosition?.Invoke(markerPosition);
 
         if (isHost)
         {
