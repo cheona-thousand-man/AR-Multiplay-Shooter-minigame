@@ -8,6 +8,8 @@ public class PlaceCharacter : NetworkBehaviour
 {
     [SerializeField] private GameObject placementObject;
     private Camera mainCam;
+    // 디버깅용 생성 위치
+    private Vector3 spawnPosition;
 
     private void Start()
     {
@@ -71,6 +73,8 @@ public class PlaceCharacter : NetworkBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
+            spawnPosition = hit.point;
+
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
             SpawnPlayerServerRpc(hit.point, rotation, NetworkManager.Singleton.LocalClientId);
         }
@@ -84,5 +88,11 @@ public class PlaceCharacter : NetworkBehaviour
         characterNetworkObject.SpawnWithOwnership(callerID);
 
         AllPlayerDataManager.Instance.AddPlacedPlayer(callerID);
+    }
+
+    void OnGUI()
+    {
+        // 디버깅용 GUI 띄우기
+        GUI.Label(new Rect(50, 100, 400, 30), $"플레이어 {NetworkManager.Singleton.LocalClientId}가 생성된 위치: {spawnPosition}");
     }
 }
