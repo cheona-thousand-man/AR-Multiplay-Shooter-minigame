@@ -14,6 +14,9 @@ public class PlaceCharacter_adv : NetworkBehaviour
     private NetworkVariable<float> referenceHeight = new NetworkVariable<float>(0f);
     private bool isHeightSetLocally = false;
 
+    // 호스트 플레이어 스폰 위치를 PlaseMonster에 넘겨주는 이벤트
+    public static event Action<Vector3, Quaternion> OnHostSpawned;
+
     private void Start()
     {
         mainCam = GameObject.FindObjectOfType<Camera>();
@@ -22,8 +25,8 @@ public class PlaceCharacter_adv : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (AllPlayerDataManager.Instance != default &&
-            AllPlayerDataManager.Instance.GetHasPlayerPlaced(NetworkManager.Singleton.LocalClientId)) return;
+        if (AllPlayerDataManager_adv.Instance != default &&
+            AllPlayerDataManager_adv.Instance.GetHasPlayerPlaced(NetworkManager.Singleton.LocalClientId)) return;
         
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
@@ -84,13 +87,16 @@ public class PlaceCharacter_adv : NetworkBehaviour
                     SetReferenceHeightServerRpc(hit.point.y);
                     isHeightSetLocally = true;
                 }
-
+                
                 // 기준 높이를 설정한 후에도 캐릭터를 생성
                 spawnPosition = hit.point;
                 spawnPosition.y = referenceHeight.Value;
 
                 Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                 SpawnPlayerServerRpc(spawnPosition, rotation, NetworkManager.Singleton.LocalClientId);
+
+                // PlaceMonster에서 사용할 기준좌표/회전각 넘겨주기
+                OnHostSpawned?.Invoke(hit.point, rotation);
             }
             else if (referenceHeight.Value != 0f)
             {
@@ -118,7 +124,7 @@ public class PlaceCharacter_adv : NetworkBehaviour
         NetworkObject characterNetworkObject = character.GetComponent<NetworkObject>();
         characterNetworkObject.SpawnWithOwnership(callerID);
 
-        AllPlayerDataManager.Instance.AddPlacedPlayer(callerID);
+        AllPlayerDataManager_adv.Instance.AddPlacedPlayer(callerID);
     }
 
     void OnGUI()

@@ -12,13 +12,13 @@ public class PlayerHandleHealthUI : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         _mainCamera = GameObject.FindObjectOfType<Camera>();
-        AllPlayerDataManager.Instance.OnPlayerHealthChanged += InstanceOnOnPlayerHealthChangedServerRpc;
+        AllPlayerDataManager_adv.Instance.OnPlayerHealthChanged += InstanceOnOnPlayerHealthChangedServerRpc;
         InstanceOnOnPlayerHealthChangedServerRpc(GetComponentInParent<NetworkObject>().OwnerClientId);
     }
 
     public override void OnNetworkDespawn()
     {
-        AllPlayerDataManager.Instance.OnPlayerHealthChanged -= InstanceOnOnPlayerHealthChangedServerRpc;
+        AllPlayerDataManager_adv.Instance.OnPlayerHealthChanged -= InstanceOnOnPlayerHealthChangedServerRpc;
     }
 
 
@@ -44,6 +44,6 @@ public class PlayerHandleHealthUI : NetworkBehaviour
     [ClientRpc]
     private void SetHealthTextClientRpc(ulong id)
     {
-        HealthText.text = AllPlayerDataManager.Instance.GetPlayerHealth(id).ToString();
+        HealthText.text = AllPlayerDataManager_adv.Instance.GetPlayerHealth(id).ToString();
     }
 }

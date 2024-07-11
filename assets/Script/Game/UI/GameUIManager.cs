@@ -15,13 +15,13 @@ public class GameUIManager : NetworkBehaviour
     {
         ShowCreateGameCanvas();
         
-        AllPlayerDataManager.Instance.OnHitPlayerDead += InstanceOnOnPlayerDead;
+        AllPlayerDataManager_adv.Instance.OnHitPlayerDead += InstanceOnOnPlayerDead;
         RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
 
     public override void OnNetworkDespawn()
     {
-        AllPlayerDataManager.Instance.OnHitPlayerDead -= InstanceOnOnPlayerDead;
+        AllPlayerDataManager_adv.Instance.OnHitPlayerDead -= InstanceOnOnPlayerDead;
         RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }
 
