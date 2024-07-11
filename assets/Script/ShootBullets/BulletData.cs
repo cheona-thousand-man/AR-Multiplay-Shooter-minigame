@@ -28,7 +28,7 @@ public class BulletData : NetworkBehaviour
     {
         if (!GetComponent<NetworkObject>()) return;
 
-        isActiveSelf.Value = isActive;
+        // isActiveSelf.Value = isActive;
 
         if (isActive == false)
         {

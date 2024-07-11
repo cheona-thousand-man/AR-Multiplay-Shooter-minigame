@@ -2613,7 +2613,7 @@ GameObject:
   - component: {fileID: 1274362357}
   - component: {fileID: 1274362359}
   m_Layer: 0
-  m_Name: PlacePlayer
+  m_Name: PlacePlayerMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

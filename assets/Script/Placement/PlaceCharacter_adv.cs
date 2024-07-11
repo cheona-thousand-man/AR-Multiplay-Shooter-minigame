@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlaceCharacter_adj : NetworkBehaviour
+public class PlaceCharacter_adv : NetworkBehaviour
 {
     [SerializeField] private GameObject placementObject;
     private Camera mainCam;

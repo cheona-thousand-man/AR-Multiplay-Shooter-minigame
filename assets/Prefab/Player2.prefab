@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 7969272509744818617}
   - component: {fileID: 2468719847262560695}
   - component: {fileID: 2332886160271543246}
-  - component: {fileID: 8331697259573420633}
+  - component: {fileID: -6163149376235056725}
   - component: {fileID: 910862503638943166}
   m_Layer: 3
   m_Name: Player2
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2390729658
+  GlobalObjectIdHash: 1498218843
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 3988577937858693943}
---- !u!114 &8331697259573420633
+--- !u!114 &-6163149376235056725
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -268,7 +268,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7017168911984882843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1509b363dd5a6e44ea5d665ade029eee, type: 3}
+  m_Script: {fileID: 11500000, guid: 371d6b8048466234a9a88d6ee1d05a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 757156078255604381, guid: 0b92b6b478157994887485edef76cd3e, type: 3}
