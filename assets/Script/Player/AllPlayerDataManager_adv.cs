@@ -29,6 +29,33 @@ public class AllPlayerDataManager_adv : NetworkBehaviour
         Instance = this;
     }
 
+        void Start()
+    {
+        NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
+        BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
+        KillPlayer.OnKillPlayer += KillPlayerOnOnKillerPlayer;
+        RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
+    }
+
+    // public override void OnNetworkDespawn()
+    // {
+    //     NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
+    //     BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
+    //     KillPlayer.OnKillPlayer -= KillPlayerOnOnKillerPlayer;
+    //     RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
+    // }
+
+    public void OnDisable()
+    {
+        if (IsServer)
+        {
+            allPlayerData.Clear();
+            NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
+        }
+        BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
+        KillPlayer.OnKillPlayer -= KillPlayerOnOnKillerPlayer;
+        RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
+    }
     public void AddPlacedPlayer(ulong id)
     {
         for (int i = 0; i < allPlayerData.Count; i++)
@@ -67,33 +94,6 @@ public class AllPlayerDataManager_adv : NetworkBehaviour
         }
     }
 
-    void Start()
-    {
-        NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
-        BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
-        KillPlayer.OnKillPlayer += KillPlayerOnOnKillerPlayer;
-        RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
-    }
-
-    // public override void OnNetworkDespawn()
-    // {
-    //     NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
-    //     BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
-    //     KillPlayer.OnKillPlayer -= KillPlayerOnOnKillerPlayer;
-    //     RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
-    // }
-
-    public void OnDisable()
-    {
-        if (IsServer)
-        {
-            allPlayerData.Clear();
-            NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
-        }
-        BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
-        KillPlayer.OnKillPlayer -= KillPlayerOnOnKillerPlayer;
-        RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
-    }
 
     private void RestartGameOnOnRestartGame()
     {

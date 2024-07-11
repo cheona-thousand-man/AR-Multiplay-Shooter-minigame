@@ -18,7 +18,7 @@ public class HandleWarningUI : NetworkBehaviour
     {
         if (IsServer)
         {
-            PlaceCharacter_adv.OnHostSpawned += OnShowWarningUI;
+            PlaceCharacter_adv.OnHostSpawned += ShowWarningUIHandler;
         }
     }
 
@@ -26,11 +26,17 @@ public class HandleWarningUI : NetworkBehaviour
     {
         if (IsServer)
         {
-            PlaceCharacter_adv.OnHostSpawned -= OnShowWarningUI;
+            PlaceCharacter_adv.OnHostSpawned -= ShowWarningUIHandler;
         }
     }
 
-    private void OnShowWarningUI(Vector3 vector, Quaternion quaternion)
+    private void ShowWarningUIHandler(Vector3 vector, Quaternion quaternion)
+    {
+        ShowWarningUIClientRpc();
+    }
+
+    [ClientRpc]
+    private void ShowWarningUIClientRpc()
     {
         StartCoroutine(ShowWarningUI());
     }

@@ -921,6 +921,7 @@ GameObject:
   - component: {fileID: 3631168938292547534}
   - component: {fileID: 3511473927333745890}
   - component: {fileID: 4193882989134868652}
+  - component: {fileID: -7027412797694068105}
   m_Layer: 6
   m_Name: CrabMonster
   m_TagString: Untagged
@@ -1068,6 +1069,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.99, y: 1.9, z: 2.52}
   m_Center: {x: 0, y: 1.52, z: 0}
+--- !u!114 &-7027412797694068105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973227050223085584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65ea72c061ba404fa955ee0a7336ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1992830490097734410
 GameObject:
   m_ObjectHideFlags: 0
@@ -4200,7 +4213,7 @@ GameObject:
   - component: {fileID: 6503289068228978653}
   - component: {fileID: 1976981262554976632}
   - component: {fileID: 161662325754355282}
-  - component: {fileID: 4215624685446681833}
+  - component: {fileID: 5635790365974608672}
   m_Layer: 6
   m_Name: LifePointsUI
   m_TagString: Untagged
@@ -4291,7 +4304,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4215624685446681833
+--- !u!114 &5635790365974608672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4300,10 +4313,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7899766734203566965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbaad69d9d831a74abe180a20be3ae32, type: 3}
+  m_Script: {fileID: 11500000, guid: e733af13fc6e06a429e03d9b78b19670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthText: {fileID: 5355790965825557607}
+  MonsterHealthText: {fileID: 5355790965825557607}
 --- !u!1 &7944858353552420395
 GameObject:
   m_ObjectHideFlags: 0

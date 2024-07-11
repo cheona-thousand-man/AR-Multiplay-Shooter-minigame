@@ -9,6 +9,7 @@ public class PlaceMonster : NetworkBehaviour
     private const float MONSTER_SPAWN_TIME = 5f;
     private Vector3 targetSpawnLocation;
     private Quaternion targetSpawnRotation;
+    private static ulong monsterIdCounter = 0;
 
     public override void OnNetworkSpawn()
     {
@@ -39,7 +40,14 @@ public class PlaceMonster : NetworkBehaviour
 
         GameObject monsterInstance = Instantiate(monsterObject, targetSpawnLocation, targetSpawnRotation);
         NetworkObject monsterNetworkObject = monsterInstance.GetComponent<NetworkObject>();
+        
+        // 몬스터 고유id 설정
+        MonsterId monsterId = monsterInstance.GetComponent<MonsterId>();
+        monsterId.Initialize(monsterIdCounter);
+        
         monsterNetworkObject.Spawn(); // 서버에서만 스폰 호출
+
+        MonsterDataManager.Instance.AddPlacedMonster(monsterIdCounter++);
     }
 
     public static float GetMonsterSpawnTime()
