@@ -12,7 +12,9 @@ public class PlaceCharacter_adv : NetworkBehaviour
     // share spawn Location variable for adjusting player's spawn position.y
     private Vector3 spawnPosition;
     private NetworkVariable<float> referenceHeight = new NetworkVariable<float>(0f);
-    private bool isHeightSetLocally = false;
+    private NetworkVariable<bool> isHeightSetLocally = new NetworkVariable<bool>(false);
+    private NetworkVariable<bool> isHostPlaced = new NetworkVariable<bool>(false);
+
 
     // 호스트 플레이어 스폰 위치를 PlaseMonster에 넘겨주는 이벤트
     public static event Action<Vector3, Quaternion> OnHostSpawned;
@@ -81,13 +83,13 @@ public class PlaceCharacter_adv : NetworkBehaviour
         {
             if (IsServer)
             {
-                if (!isHeightSetLocally)
+                if (!isHeightSetLocally.Value)
                 {
                     // 기준 높이를 서버에 설정 요청
                     SetReferenceHeightServerRpc(hit.point.y);
-                    isHeightSetLocally = true;
+                    isHeightSetLocally.Value = true;
                 }
-                
+
                 // 기준 높이를 설정한 후에도 캐릭터를 생성
                 spawnPosition = hit.point;
                 spawnPosition.y = referenceHeight.Value;
@@ -95,10 +97,12 @@ public class PlaceCharacter_adv : NetworkBehaviour
                 Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                 SpawnPlayerServerRpc(spawnPosition, rotation, NetworkManager.Singleton.LocalClientId);
 
+                isHostPlaced.Value = true;
+
                 // PlaceMonster에서 사용할 기준좌표/회전각 넘겨주기
                 OnHostSpawned?.Invoke(hit.point, rotation);
             }
-            else if (referenceHeight.Value != 0f)
+            else if (isHostPlaced.Value)
             {
                 // 네트워크 변수에서 기준 높이를 가져와서 높이를 조정
                 spawnPosition = hit.point;
@@ -132,5 +136,11 @@ public class PlaceCharacter_adv : NetworkBehaviour
         // 디버깅용 GUI 띄우기
         GUI.Label(new Rect(50, 100, 400, 30), $"플레이어 {NetworkManager.Singleton.LocalClientId}가 생성된 위치: {spawnPosition}");
         GUI.Label(new Rect(50, 130, 400, 30), $"기준 높이: {referenceHeight.Value}");
+
+        // 호스트가 플레이어를 놓기 전까지는 클라이언트가 플레이어를 놓지 못하도록 안내
+        if (!isHostPlaced.Value && !IsServer)
+        {
+            GUI.Label(new Rect(50, 160, 800, 30), "지금은 캐릭터를 생성할 수 없습니다. 호스트가 캐릭터를 생성할 때까지 기다려주세요.");
+        }
     }
 }
