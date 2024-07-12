@@ -922,6 +922,7 @@ GameObject:
   - component: {fileID: 3511473927333745890}
   - component: {fileID: 4193882989134868652}
   - component: {fileID: -7027412797694068105}
+  - component: {fileID: -3370570837610617647}
   m_Layer: 6
   m_Name: CrabMonster
   m_TagString: Untagged
@@ -937,7 +938,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1973227050223085584}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.09, y: 0, z: -1.8}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
@@ -947,7 +948,7 @@ Transform:
   - {fileID: 1523826667754198115}
   - {fileID: 775140629685422102}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &993238558119683381
 Animator:
   serializedVersion: 5
@@ -981,7 +982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1196232042
+  GlobalObjectIdHash: 3267472839
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1081,6 +1082,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65ea72c061ba404fa955ee0a7336ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3370570837610617647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973227050223085584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4aa38e0010d4c04dae57cde4e1420bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveInterval: 2
+  moveRange: 3
+  moveSpeed: 1
 --- !u!1 &1992830490097734410
 GameObject:
   m_ObjectHideFlags: 0

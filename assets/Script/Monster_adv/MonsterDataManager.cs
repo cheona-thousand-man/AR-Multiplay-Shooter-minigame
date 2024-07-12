@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,7 +8,7 @@ public class MonsterDataManager : NetworkBehaviour
 {
     public static MonsterDataManager Instance;
     private NetworkList<MonsterData> allMonsterData;
-    private const int LIFEPOINTS = 50;
+    private const int LIFEPOINTS = 30;
     private const int LIFEPOINTS_TO_REDUCE = 1;
     public event Action<ulong> OnHitMonsterDead;
     public event Action<ulong> OnMonsterHealthChanged;
@@ -28,7 +30,7 @@ public class MonsterDataManager : NetworkBehaviour
 
     public void AddPlacedMonster(ulong id)
     {
-        MonsterData newMonsterData = new MonsterData(id, 100f, true);
+        MonsterData newMonsterData = new MonsterData(id, LIFEPOINTS, true);
         allMonsterData.Add(newMonsterData);
     }
 
@@ -37,15 +39,17 @@ public class MonsterDataManager : NetworkBehaviour
         if (IsServer)
         {
             BulletData_adv.OnHitMonster += BulletDataOnHitMonster;
+            RestartGame.OnRestartGame += RestartGameProcess;
         }
     }    
 
-    public override void OnNetworkDespawn()
+    private void OnDisable()
     {
         if (IsServer)
         {
             allMonsterData.Clear();
             BulletData_adv.OnHitMonster -= BulletDataOnHitMonster;
+            RestartGame.OnRestartGame -= RestartGameProcess;
         }
     }
 
@@ -106,5 +110,34 @@ public class MonsterDataManager : NetworkBehaviour
     void SyncReducedMonsterHealthClientRpc(ulong monster)
     {
         OnMonsterHealthChanged?.Invoke(monster);
+    }
+
+    private void RestartGameProcess()
+    {
+        if (!IsServer) return;
+
+         List<NetworkObject> monsterObjects = FindObjectsOfType<MonsterMovement>()
+            .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
+
+        foreach (var monsterobj in monsterObjects)
+        {
+            monsterobj.Despawn();
+        }
+
+        ResetNetworkList();
+    }
+
+    private void ResetNetworkList()
+    {
+        for(int i = 0; i < allMonsterData.Count; i++)
+        {
+            MonsterData resetMonster = new MonsterData(
+                allMonsterData[i].monsterID,
+                lifePoints: LIFEPOINTS,
+                monsterPlaced: false
+            );
+
+            allMonsterData[i] = resetMonster;
+        }
     }
 }

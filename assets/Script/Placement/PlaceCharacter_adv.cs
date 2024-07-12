@@ -138,9 +138,9 @@ public class PlaceCharacter_adv : NetworkBehaviour
         GUI.Label(new Rect(50, 130, 400, 30), $"기준 높이: {referenceHeight.Value}");
 
         // 호스트가 플레이어를 놓기 전까지는 클라이언트가 플레이어를 놓지 못하도록 안내
-        if (!isHostPlaced.Value && !IsServer)
-        {
-            GUI.Label(new Rect(50, 160, 800, 30), "지금은 캐릭터를 생성할 수 없습니다. 호스트가 캐릭터를 생성할 때까지 기다려주세요.");
-        }
+        // if (!isHostPlaced.Value && !IsServer)
+        // {
+        //     GUI.Label(new Rect(50, 160, 800, 30), "지금은 캐릭터를 생성할 수 없습니다. 호스트가 캐릭터를 생성할 때까지 기다려주세요.");
+        // }
     }
 }

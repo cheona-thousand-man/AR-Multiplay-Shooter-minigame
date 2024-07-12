@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlaceMonster : NetworkBehaviour
 {
     [SerializeField] private GameObject monsterObject;
-    private const float MONSTER_SPAWN_TIME = 5f;
+    private const float MONSTER_SPAWN_TIME = 10f;
     private Vector3 targetSpawnLocation;
     private Quaternion targetSpawnRotation;
     private static ulong monsterIdCounter = 0;
@@ -29,8 +29,8 @@ public class PlaceMonster : NetworkBehaviour
 
     private void SetSpawnLocation(Vector3 position, Quaternion rotation)
     {
-        targetSpawnLocation = new Vector3(position.x + UnityEngine.Random.Range(-4f, 4f), position.y, position.z + UnityEngine.Random.Range(-4f, 4f));
-        targetSpawnRotation = rotation;
+        targetSpawnLocation = new Vector3(position.x + UnityEngine.Random.Range(-3f, 3f), position.y, position.z + UnityEngine.Random.Range(-3f, 3f));
+        targetSpawnRotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y + 180f, rotation.eulerAngles.z);;
         StartCoroutine(SpawnMonster());
     }
 
