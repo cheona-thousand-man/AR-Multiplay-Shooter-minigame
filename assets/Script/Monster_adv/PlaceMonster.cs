@@ -29,7 +29,7 @@ public class PlaceMonster : NetworkBehaviour
 
     private void SetSpawnLocation(Vector3 position, Quaternion rotation)
     {
-        targetSpawnLocation = new Vector3(position.x + UnityEngine.Random.Range(-3f, 3f), position.y, position.z + UnityEngine.Random.Range(-3f, 3f));
+        targetSpawnLocation = new Vector3(position.x + UnityEngine.Random.Range(-1.5f, 1.5f), position.y, position.z + UnityEngine.Random.Range(-1.5f, 1.5f));
         targetSpawnRotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y + 180f, rotation.eulerAngles.z);;
         StartCoroutine(SpawnMonster());
     }
