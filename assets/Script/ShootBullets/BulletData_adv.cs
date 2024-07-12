@@ -70,8 +70,9 @@ public class BulletData_adv : NetworkBehaviour
                 {
                     if (collision.gameObject.TryGetComponent<MonsterId>(out MonsterId monster))
                     {
-                    (ulong, ulong) fromShooterToHit = new (owner.Value, monster.monsterId);
-                    OnHitMonster?.Invoke(fromShooterToHit);
+                        Debug.Log($"Monster Hit!!");
+                        (ulong, ulong) fromShooterToHit = new (owner.Value, monster.monsterId);
+                        OnHitMonster?.Invoke(fromShooterToHit);
                     }
                     SetBulletIsAvticeServerRpc(false);
                     return;

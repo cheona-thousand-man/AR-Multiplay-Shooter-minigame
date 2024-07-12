@@ -47,6 +47,7 @@ public class PlaceMonster : NetworkBehaviour
         
         monsterNetworkObject.Spawn(); // 서버에서만 스폰 호출
 
+        yield return new WaitUntil(() => MonsterDataManager.Instance != null);
         MonsterDataManager.Instance.AddPlacedMonster(monsterIdCounter++);
     }
 

@@ -22,6 +22,8 @@ public class MonsterDataManager : NetworkBehaviour
         {
             Destroy(gameObject);
         }
+
+        allMonsterData = new NetworkList<MonsterData>();
     }
 
     public void AddPlacedMonster(ulong id)
@@ -30,7 +32,7 @@ public class MonsterDataManager : NetworkBehaviour
         allMonsterData.Add(newMonsterData);
     }
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
@@ -38,7 +40,7 @@ public class MonsterDataManager : NetworkBehaviour
         }
     }    
 
-    public void OnDisable()
+    public override void OnNetworkDespawn()
     {
         if (IsServer)
         {
@@ -66,8 +68,10 @@ public class MonsterDataManager : NetworkBehaviour
         {
             for (int i = 0; i < allMonsterData.Count; i++)
             {
+                Debug.Log("Monster hit and process");
                 if (allMonsterData[i].monsterID == ids.monster)
                 {
+                    Debug.Log($"Finded hit monster {allMonsterData[i]}");
                     int lifePointsToReduce = allMonsterData[i].lifePoints == 0 ? 0 : LIFEPOINTS_TO_REDUCE;
 
                     // 몬스터 HP 처리
@@ -76,6 +80,10 @@ public class MonsterDataManager : NetworkBehaviour
                         allMonsterData[i].lifePoints - lifePointsToReduce,
                         allMonsterData[i].monsterPlaced
                     );
+
+                    allMonsterData[i] = newData;
+
+                    Debug.Log($"Monster {allMonsterData[i].monsterID} hit and health {allMonsterData[i].lifePoints}");
 
                     OnMonsterHealthChanged?.Invoke(ids.monster);
 
@@ -87,8 +95,6 @@ public class MonsterDataManager : NetworkBehaviour
                     }
 
                     Debug.Log($"Player got hit {ids.monster} Lifepoints left => {newData.lifePoints} shot by {ids.shooter}");
-
-                    allMonsterData[i] = newData;
                     break;
                 }
             }

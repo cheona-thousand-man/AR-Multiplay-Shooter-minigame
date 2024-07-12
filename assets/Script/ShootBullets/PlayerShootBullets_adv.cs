@@ -95,7 +95,7 @@ public class PlayerShootBullets_adv : NetworkBehaviour
         NetworkObject bulletNetworkObject = bullet.GetComponent<NetworkObject>();
 
         bulletNetworkObject.Spawn();
-        bullet.GetComponent<BulletData>().SetOwnershipServerRpc(callerID);
+        bullet.GetComponent<BulletData_adv>().SetOwnershipServerRpc(callerID);
 
         Rigidbody bulletRigidBody = bullet.GetComponent<Rigidbody>();
 

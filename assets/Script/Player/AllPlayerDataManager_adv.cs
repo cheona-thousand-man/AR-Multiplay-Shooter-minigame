@@ -32,18 +32,11 @@ public class AllPlayerDataManager_adv : NetworkBehaviour
         void Start()
     {
         NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
-        BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
+        BulletData_adv.OnHitPlayer += BulletDataOnOnHitPlayer;
+        BulletData_adv.OnHitMonster += ScoreAddOnHitMonster;
         KillPlayer.OnKillPlayer += KillPlayerOnOnKillerPlayer;
         RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
-
-    // public override void OnNetworkDespawn()
-    // {
-    //     NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
-    //     BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
-    //     KillPlayer.OnKillPlayer -= KillPlayerOnOnKillerPlayer;
-    //     RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
-    // }
 
     public void OnDisable()
     {
@@ -52,10 +45,32 @@ public class AllPlayerDataManager_adv : NetworkBehaviour
             allPlayerData.Clear();
             NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
         }
-        BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
+        BulletData_adv.OnHitPlayer -= BulletDataOnOnHitPlayer;
+        BulletData_adv.OnHitMonster -= ScoreAddOnHitMonster;
         KillPlayer.OnKillPlayer -= KillPlayerOnOnKillerPlayer;
         RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }
+
+    private void ScoreAddOnHitMonster((ulong shooter, ulong monster) ids)
+    {
+        for (int i = 0; i < allPlayerData.Count; i++)
+        {
+            if (allPlayerData[i].clientID == ids.shooter)
+            {
+                PlayerData newData = new PlayerData(
+                    allPlayerData[i].clientID,
+                    allPlayerData[i].score + 1,
+                    allPlayerData[i].lifePoints,
+                    true
+                );
+
+                allPlayerData[i] = newData;
+
+                Debug.Log($"Player {allPlayerData[i].clientID}'s Score is {allPlayerData[i].score}");
+            }
+        }
+    }
+
     public void AddPlacedPlayer(ulong id)
     {
         for (int i = 0; i < allPlayerData.Count; i++)
@@ -101,7 +116,7 @@ public class AllPlayerDataManager_adv : NetworkBehaviour
 
         List<NetworkObject> playerObjects = FindObjectsOfType<PlayerMovement>()
             .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
-        List<NetworkObject> bulletObjects = FindObjectsOfType<BulletData>()
+        List<NetworkObject> bulletObjects = FindObjectsOfType<BulletData_adv>()
             .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
         
         foreach (var playerobj in playerObjects)
